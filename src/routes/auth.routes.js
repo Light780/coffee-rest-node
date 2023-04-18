@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { authLogin } from '../controllers/auth.controller.js'
+import { authLogin, authGoogleSignIn } from '../controllers/auth.controller.js'
 import { check } from 'express-validator'
 import { validateFields } from '../middlewares/validate-fields.js'
 
@@ -10,5 +10,10 @@ authRouter.post('/login', [
   check('password', 'password is required').notEmpty(),
   validateFields
 ], authLogin)
+
+authRouter.post('/google', [
+  check('idToken', 'id_token is required').notEmpty(),
+  validateFields
+], authGoogleSignIn)
 
 export default authRouter
