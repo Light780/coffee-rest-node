@@ -1,5 +1,4 @@
-import Role from '../models/role.js'
-import User from '../models/user.js'
+import { Role, User, Category, Product } from '../models/index.js'
 
 export const isValidRole = async (role = '') => {
   const existsRole = await Role.find({ role })
@@ -8,7 +7,7 @@ export const isValidRole = async (role = '') => {
   }
 }
 
-export const existsEmial = async (email) => {
+export const existsEmail = async (email) => {
   const existsEmail = await User.findOne({ email })
   if (existsEmail) {
     throw new Error(`the email: ${email} already exists`)
@@ -19,5 +18,19 @@ export const existsUserById = async (id) => {
   const existsUser = await User.findById(id)
   if (!existsUser) {
     throw new Error(`the user with id: ${id} does not exist`)
+  }
+}
+
+export const existsCategory = async (id) => {
+  const existsCategory = await Category.findById(id)
+  if (!existsCategory) {
+    throw new Error(`the category with id: ${id} does not exist`)
+  }
+}
+
+export const existsProduct = async (id) => {
+  const existsProduct = await Product.findById(id)
+  if (!existsProduct) {
+    throw new Error(`the product with id: ${id} does not exist`)
   }
 }

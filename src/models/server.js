@@ -3,6 +3,9 @@ import cors from 'cors'
 import userRouter from '../routes/user.routes.js'
 import { connectDB } from '../config/db.js'
 import authRouter from '../routes/auth.routes.js'
+import categoryRouter from '../routes/category.routes.js'
+import productRouter from '../routes/product.routes.js'
+import searchRouter from '../routes/search.routes.js'
 
 class Server {
   constructor () {
@@ -19,6 +22,9 @@ class Server {
   routes () {
     this.app.use('/api/auth', authRouter)
     this.app.use('/api/user', userRouter)
+    this.app.use('/api/category', categoryRouter)
+    this.app.use('/api/product', productRouter)
+    this.app.use('/api/search', searchRouter)
   }
 
   middlewares () {

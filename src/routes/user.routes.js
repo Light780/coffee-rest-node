@@ -1,34 +1,35 @@
 import express from 'express'
-import { deleteUser, getUser, postUser, putUser } from '../controllers/user.controller.js'
+import { deleteUser, getUser, createUser, updateUser } from '../controllers/user.controller.js'
 import { check } from 'express-validator'
-import { existsEmial, existsUserById, isValidRole } from '../helpers/db-validators.js'
+import { existsEmail, existsUserById, isValidRole } from '../helpers/db-validators.js'
 import { validateFields, validateJwt, validateRoles } from '../middlewares/index.js'
 const userRouter = express.Router()
 
-userRouter.get('/', getUser)
+userRouter.get('/', [validateJwt], getUser)
 
 userRouter.post('/', [
   check('name', 'name is required').notEmpty(),
   check('email', 'email is not valid').isEmail(),
-  check('email').custom(existsEmial),
+  check('email').custom(existsEmail),
   check('password', 'password must contain more than 6 characters').isLength({ min: 6 }),
   check('role', 'is not a valid role').isIn(['ADMIN_ROLE', 'USER_ROLE']),
   check('role').custom(isValidRole),
   validateFields
-], postUser)
+], createUser)
 
 userRouter.put('/:id', [
-  check('id', 'is not a valid id').isMongoId(),
+  validateJwt,
+  check('id', 'is not a valid identifier').isMongoId(),
   check('id').custom(existsUserById),
   check('role', 'is not a valid role').isIn(['ADMIN_ROLE', 'USER_ROLE']),
   check('role').custom(isValidRole),
   validateFields
-], putUser)
+], updateUser)
 
 userRouter.delete('/:id', [
   validateJwt,
-  validateRoles(['ADMIN_ROLE']),
-  check('id', 'is not a valid id').isMongoId(),
+  validateRoles('ADMIN_ROLE'),
+  check('id', 'is not a valid identifier').isMongoId(),
   check('id').custom(existsUserById),
   validateFields
 ], deleteUser)

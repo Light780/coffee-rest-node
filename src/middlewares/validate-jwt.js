@@ -3,7 +3,7 @@ import User from '../models/user.js'
 import jwt from 'jsonwebtoken'
 
 export const validateJwt = async (req = request, res = response, next) => {
-  const authorization = req.header('authorization')
+  const authorization = req.header('Authorization')
   const ERR_AUTH = 'User not authenticated'
 
   if (!authorization) {
@@ -12,7 +12,7 @@ export const validateJwt = async (req = request, res = response, next) => {
     })
   }
 
-  const token = authorization[1]
+  const token = authorization.split(' ')[1]
   if (!token) {
     return res.status(400).json({
       msg: ERR_AUTH

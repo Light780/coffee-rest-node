@@ -5,7 +5,7 @@ import User from '../models/user.js'
 export const getUser = async (req = request, res = response) => {
   const { limit = 5, from = 0 } = req.query
 
-  const [data, total] = await Promise.all([
+  const [data, totalRecords] = await Promise.all([
     await User.find()
       .skip(from)
       .limit(limit),
@@ -14,11 +14,11 @@ export const getUser = async (req = request, res = response) => {
 
   res.json({
     data,
-    total
+    totalRecords
   })
 }
 
-export const postUser = async (req = request, res = response) => {
+export const createUser = async (req = request, res = response) => {
   const { name, email, password, role } = req.body
   const user = new User({ name, email, password, role })
 
@@ -32,7 +32,7 @@ export const postUser = async (req = request, res = response) => {
   res.json(user)
 }
 
-export const putUser = async (req = request, res = response) => {
+export const updateUser = async (req = request, res = response) => {
   const { id } = req.params
   const { _id, password, google, email, ...userRequest } = req.body
 
