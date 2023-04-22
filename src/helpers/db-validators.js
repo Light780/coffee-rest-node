@@ -1,6 +1,6 @@
 import { Role, User, Category, Product } from '../models/index.js'
 
-export const isValidRole = async (role = '') => {
+export const isValidRole = async (role) => {
   const existsRole = await Role.find({ role })
   if (!existsRole) {
     throw new Error(`role with name: ${role} does not exist`)
@@ -33,4 +33,11 @@ export const existsProduct = async (id) => {
   if (!existsProduct) {
     throw new Error(`the product with id: ${id} does not exist`)
   }
+}
+
+export const validateAllowedCollections = (collection, allowedCollections = []) => {
+  if (!allowedCollections.includes(collection)) {
+    throw new Error(`the collection ${collection} is not allowed. Allowed collections: ${allowedCollections}`)
+  }
+  return true
 }

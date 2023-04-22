@@ -1,11 +1,15 @@
 import express from 'express'
 import cors from 'cors'
-import userRouter from '../routes/user.routes.js'
 import { connectDB } from '../config/db.js'
-import authRouter from '../routes/auth.routes.js'
-import categoryRouter from '../routes/category.routes.js'
-import productRouter from '../routes/product.routes.js'
-import searchRouter from '../routes/search.routes.js'
+import fileUpload from 'express-fileupload'
+import {
+  authRouter,
+  userRouter,
+  categoryRouter,
+  productRouter,
+  searchRouter,
+  uploadRouter
+} from '../routes/index.js'
 
 class Server {
   constructor () {
@@ -25,12 +29,18 @@ class Server {
     this.app.use('/api/category', categoryRouter)
     this.app.use('/api/product', productRouter)
     this.app.use('/api/search', searchRouter)
+    this.app.use('/api/upload', uploadRouter)
   }
 
   middlewares () {
     this.app.use(cors())
     this.app.use(express.json())
     this.app.use(express.static('./src/public'))
+    this.app.use(fileUpload({
+      useTempFiles: true,
+      tempFileDir: '/tmp/',
+      createParentPath: true
+    }))
   }
 
   listen () {
