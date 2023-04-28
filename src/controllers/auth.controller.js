@@ -61,3 +61,10 @@ export const authGoogleSignIn = async (req = request, res = response) => {
     })
   }
 }
+
+export const renewToken = async (req = request, res = response) => {
+  const { user } = req
+  const token = await generateJwt(user.id)
+
+  res.json({ user, token })
+}

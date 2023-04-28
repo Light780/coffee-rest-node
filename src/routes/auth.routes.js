@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import { authLogin, authGoogleSignIn } from '../controllers/auth.controller.js'
+import { authLogin, authGoogleSignIn, renewToken } from '../controllers/auth.controller.js'
 import { check } from 'express-validator'
-import { validateFields } from '../middlewares/validate-fields.js'
+import { validateFields, validateJwt } from '../middlewares/index.js'
 
 const authRouter = Router()
 
@@ -15,5 +15,7 @@ authRouter.post('/google', [
   check('idToken', 'id_token is required').notEmpty(),
   validateFields
 ], authGoogleSignIn)
+
+authRouter.get('/', validateJwt, renewToken)
 
 export default authRouter
